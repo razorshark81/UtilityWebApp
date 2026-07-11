@@ -1,0 +1,17 @@
+{
+  "name": "utilityhub",
+  "version": "1.0.0",
+  "private": true,
+  "description": "UtilityHub — 200+ free, private, in-browser tools. Next.js App Router MPA with per-tool SEO pages.",
+  "scripts": {
+    "gen": "python gen.py",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^14.2.35",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  }
+}
