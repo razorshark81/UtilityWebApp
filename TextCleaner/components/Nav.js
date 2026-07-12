@@ -49,17 +49,22 @@ export default function Nav() {
               Categories
               <svg className="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
             </button>
+            {open && <div className="mega-backdrop open" onClick={() => setOpen(false)} />}
             <div className={`nav-cat-panel ${open ? 'open' : ''}`}>
-              {CATEGORY_ORDER.map((key) => {
-                const c = CATEGORIES[key];
-                return (
-                  <Link key={key} href={`/#cat-${key}`} className="nav-cat-item" onClick={() => { setOpen(false); setMobile(false); }}>
-                    <span className="nav-cat-emoji" style={{ background: c.color }}>{c.emoji}</span>
-                    <span className="nav-cat-name">{c.name}</span>
-                    <span className="nav-cat-n">{toolsByCat(key).length}</span>
-                  </Link>
-                );
-              })}
+              <div className="nav-cat-panel-inner">
+                {CATEGORY_ORDER.map((key) => {
+                  const c = CATEGORIES[key];
+                  return (
+                    <Link key={key} href={`/#cat-${key}`} className="nav-cat-item" onClick={() => { setOpen(false); setMobile(false); }}>
+                      <span className="nav-cat-emoji" style={{ background: c.color }}>{c.emoji}</span>
+                      <div className="nav-cat-text">
+                        <span className="nav-cat-name">{c.name}</span>
+                        <span className="nav-cat-n">{toolsByCat(key).length} tools</span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>

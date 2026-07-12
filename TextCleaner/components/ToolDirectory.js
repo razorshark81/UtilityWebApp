@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import { TOOLS, CATEGORIES, CATEGORY_ORDER, toolsByCat } from '@/lib/catalog';
 
@@ -8,11 +8,16 @@ export default function ToolDirectory() {
   const [cat, setCat] = useState('all');
 
   useEffect(() => {
+    const applyHash = () => {
+      const m = window.location.hash.match(/^#cat-(\w+)/);
+      if (m && CATEGORIES[m[1]]) setCat(m[1]);
+    };
     const params = new URLSearchParams(window.location.search);
     const initial = params.get('q');
     if (initial) setQ(initial);
-    const hash = window.location.hash.match(/^#cat-(\w+)/);
-    if (hash && CATEGORIES[hash[1]]) setCat(hash[1]);
+    applyHash();
+    window.addEventListener('hashchange', applyHash);
+    return () => window.removeEventListener('hashchange', applyHash);
   }, []);
 
   const query = q.trim().toLowerCase();
@@ -36,36 +41,81 @@ export default function ToolDirectory() {
     [query, cat]
   );
 
+  const scrollRef = useRef(null);
+  const scrollPills = (dir) => {
+    if (scrollRef.current) scrollRef.current.scrollBy({ left: dir * 250, behavior: 'smooth' });
+  };
+
+  const showIndex = cat === 'all' && !query;
+  const jumpTo = (key) => {
+    setCat('all');
+    requestAnimationFrame(() => document.getElementById(`cat-${key}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  };
+
   return (
     <main className="container">
       <section className="hero">
         <span className="hero-badge"><span className="pulse" />100% in-browser · no uploads · no tracking</span>
-        <h1>Every little tool,<br /><span className="grad">all in one place.</span></h1>
-        <p>{TOOLS.length} fast, free, privacy-first utilities for text, code, images, conversions and everyday math — no sign-up, nothing ever leaves your device.</p>
-        <div className="hero-stats">
-          <div className="hero-stat"><div className="num">{TOOLS.length}</div><div className="lbl">Tools</div></div>
-          <div className="hero-stat"><div className="num">{CATEGORY_ORDER.length}</div><div className="lbl">Categories</div></div>
-          <div className="hero-stat"><div className="num">100%</div><div className="lbl">Private</div></div>
-        </div>
+        <h1>{TOOLS.length}+ free tools,<br /><span className="grad">all in one place.</span></h1>
+        <p>Fast, privacy-first utilities for text, code, images, conversions, calculators and more — no sign-up, nothing ever leaves your device.</p>
         <div className="search-wrap">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
           <input type="text" value={q} onChange={(e) => setQ(e.target.value)} placeholder={`Search ${TOOLS.length} tools…  (try “json”, “color”, “bmi”)`} aria-label="Search tools" autoComplete="off" />
         </div>
+        <div className="hero-stats">
+          <div className="hero-stat"><b>{TOOLS.length}</b> tools</div>
+          <div className="hero-stat"><b>{CATEGORY_ORDER.length}</b> categories</div>
+          <div className="hero-stat"><b>100%</b> private &amp; free</div>
+        </div>
       </section>
 
-      <nav className="pills" aria-label="Filter by category">
-        <button className={`pill ${cat === 'all' ? 'active' : ''}`} style={{ '--pc': 'var(--accent)' }} onClick={() => setCat('all')}>
-          All tools<span>{counts.all}</span>
+      {/* Category index — an at-a-glance directory */}
+      {showIndex && (
+        <section className="cat-index" aria-label="Browse by category">
+          <div className="section-label">Browse by category</div>
+          <div className="cat-tiles">
+            {CATEGORY_ORDER.map((k) => {
+              const c = CATEGORIES[k];
+              const examples = toolsByCat(k).slice(0, 4).map((t) => t.name).join(' · ');
+              return (
+                <button key={k} className="cat-tile" style={{ '--cc': c.color }} onClick={() => jumpTo(k)}>
+                  <span className="cat-tile-emoji" style={{ background: c.color }}>{c.emoji}</span>
+                  <div className="cat-tile-body">
+                    <div className="cat-tile-head">
+                      <span className="cat-tile-name">{c.name}</span>
+                      <span className="cat-tile-count">{toolsByCat(k).length}</span>
+                    </div>
+                    <div className="cat-tile-eg">{examples}</div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* Sticky category filter */}
+      <div className="pills-wrapper">
+        <button className="pill-scroll left" onClick={() => scrollPills(-1)} aria-label="Scroll left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
         </button>
-        {CATEGORY_ORDER.map((k) => {
-          const c = CATEGORIES[k];
-          return (
-            <button key={k} className={`pill ${cat === k ? 'active' : ''}`} style={{ '--pc': c.color }} onClick={() => setCat(cat === k ? 'all' : k)}>
-              <span className="pill-emoji">{c.emoji}</span>{c.name}<span>{counts[k]}</span>
-            </button>
-          );
-        })}
-      </nav>
+        <nav className="pills" aria-label="Filter by category" ref={scrollRef}>
+          <button className={`pill ${cat === 'all' ? 'active' : ''}`} style={{ '--pc': 'var(--accent)' }} onClick={() => setCat('all')}>
+            All tools<span>{counts.all}</span>
+          </button>
+          {CATEGORY_ORDER.map((k) => {
+            const c = CATEGORIES[k];
+            return (
+              <button key={k} className={`pill ${cat === k ? 'active' : ''}`} style={{ '--pc': c.color }} onClick={() => setCat(cat === k ? 'all' : k)}>
+                <span className="pill-emoji">{c.emoji}</span>{c.name}<span>{counts[k]}</span>
+              </button>
+            );
+          })}
+        </nav>
+        <button className="pill-scroll right" onClick={() => scrollPills(1)} aria-label="Scroll right">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+        </button>
+      </div>
 
       {sections.map(({ key, cat: c, tools }) => (
         <section className="cat-section" id={`cat-${key}`} key={key}>
