@@ -14,12 +14,15 @@
 }
 :root[data-theme="dark"] { --bg: #0a0e1a; --bg-2: #0f0a1e; }
 
-body { background:
-  radial-gradient(1200px 600px at 15% -8%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%),
-  radial-gradient(1000px 520px at 100% 0%, color-mix(in srgb, #ec4899 7%, transparent), transparent 55%),
-  var(--bg);
+body {
+  display: block;  /* override the legacy flex/align-items:center that shrank layout to content width */
+  background:
+    radial-gradient(1200px 600px at 15% -8%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%),
+    radial-gradient(1000px 520px at 100% 0%, color-mix(in srgb, #ec4899 7%, transparent), transparent 55%),
+    var(--bg);
   background-attachment: fixed;
 }
+.stage { width: 100%; }
 a { color: inherit; text-decoration: none; }
 
 .container { width: 100%; max-width: 1500px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 36px); }
@@ -29,15 +32,16 @@ a { color: inherit; text-decoration: none; }
    One sticky element, one background → no seams.
    ========================================================================== */
 .nav {
-  position: sticky; top: 0; z-index: 200;
+  display: block;  /* override legacy .nav flex/justify-content:center from globals.css */
+  position: sticky; top: 0; z-index: 200; width: 100%; padding: 0;
   background: color-mix(in srgb, var(--surface) 80%, transparent);
   -webkit-backdrop-filter: saturate(1.7) blur(18px);
   backdrop-filter: saturate(1.7) blur(18px);
   border-bottom: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
 }
 .nav-inner {
-  max-width: 1500px; margin: 0 auto; display: flex; align-items: center; gap: 16px;
-  padding: 11px clamp(16px, 3vw, 36px);
+  max-width: 1500px; margin: 0 auto; display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center; gap: 16px; padding: 11px clamp(16px, 3vw, 36px);
 }
 .brand { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 .brand-logo {
@@ -50,33 +54,65 @@ a { color: inherit; text-decoration: none; }
 .brand-name { font-size: 1.14rem; font-weight: 800; letter-spacing: -.03em; color: var(--text); }
 .brand-name b { background: var(--grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 
-.nav-search { position: relative; flex: 1; max-width: 560px; margin: 0 auto; display: flex; align-items: center; }
-.nav-search svg { position: absolute; left: 16px; width: 17px; height: 17px; color: var(--text-3); pointer-events: none; }
+.nav-search { position: relative; width: 100%; max-width: 720px; justify-self: center; display: flex; align-items: center; }
+.nav-search svg { position: absolute; left: 19px; width: 20px; height: 20px; color: var(--text-3); pointer-events: none; }
 .nav-search input {
-  width: 100%; padding: 10px 16px 10px 42px; border-radius: 999px;
+  width: 100%; padding: 13px 20px 13px 50px; border-radius: 999px;
   border: 1px solid var(--border); background: var(--surface-2); color: var(--text);
-  font-family: var(--font); font-size: .9rem; outline: none;
+  font-family: var(--font); font-size: 1rem; outline: none;
   transition: border-color .2s, box-shadow .2s, background .2s;
 }
 .nav-search input:focus { border-color: var(--accent); box-shadow: var(--ring); background: var(--surface); }
 
-/* category menu row */
-.nav-cats { border-top: 1px solid color-mix(in srgb, var(--border) 55%, transparent); }
-.nav-cats-inner {
-  max-width: 1500px; margin: 0 auto; display: flex; align-items: center; gap: 3px;
-  padding: 7px clamp(12px, 3vw, 32px); overflow-x: auto; scrollbar-width: none;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+/* category menu row — per-category dropdowns + scroll arrows on overflow */
+.catbar {
+  border-top: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
+  display: flex; align-items: center; max-width: 1500px; margin: 0 auto;
+  padding: 0 clamp(8px, 2vw, 22px);
 }
-.nav-cats-inner::-webkit-scrollbar { display: none; }
-.ncat {
-  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; padding: 7px 13px;
-  border: none; background: none; color: var(--text-2); font-family: var(--font); font-size: .855rem; font-weight: 600;
+.catbar-scroll {
+  flex: 1; display: flex; align-items: center; gap: 2px; overflow-x: auto;
+  scrollbar-width: none; scroll-behavior: smooth; padding: 6px 2px;
+}
+.catbar-scroll::-webkit-scrollbar { display: none; }
+.catbar-item {
+  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; padding: 8px 12px;
+  border: none; background: none; color: var(--text-2); font-family: var(--font); font-size: .85rem; font-weight: 600;
   cursor: pointer; border-radius: 9px; white-space: nowrap; transition: color .15s, background .15s;
 }
-.ncat:hover { color: var(--text); background: var(--surface-3); }
-.ncat.active { color: var(--pc); background: color-mix(in srgb, var(--pc) 13%, transparent); }
-.ncat-emoji { font-size: .95rem; }
+.catbar-item:hover { color: var(--text); background: var(--surface-3); }
+.catbar-item.open { color: var(--pc); background: color-mix(in srgb, var(--pc) 13%, transparent); }
+.ci-emoji { font-size: .95rem; }
+.ci-caret { width: 13px; height: 13px; opacity: .45; transition: transform .2s, opacity .2s; }
+.catbar-item.open .ci-caret { transform: rotate(180deg); opacity: .9; }
+
+.catbar-arrow {
+  flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--border);
+  background: var(--surface); color: var(--text-2); display: none; place-items: center; cursor: pointer;
+  box-shadow: var(--shadow-xs); transition: color .18s, border-color .18s, transform .18s; margin: 0 2px;
+}
+.catbar-arrow.show { display: grid; }
+.catbar-arrow:hover { color: var(--accent); border-color: var(--accent); transform: scale(1.08); }
+.catbar-arrow svg { width: 18px; height: 18px; }
+
+/* dropdown panel (fixed so it escapes the scrolling row) */
+.catbar-backdrop { position: fixed; inset: 0; z-index: 240; }
+.catbar-dd {
+  position: fixed; z-index: 250; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; box-shadow: var(--shadow-lg); overflow: hidden;
+  animation: ddIn .16s cubic-bezier(.22,.7,.3,1);
+}
+@keyframes ddIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+.catbar-dd-head { display: flex; align-items: center; gap: 10px; padding: 13px 16px; border-bottom: 1px solid var(--border); }
+.cdd-emoji { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-size: 1rem; color: #fff; flex-shrink: 0; }
+.cdd-title { font-weight: 800; font-size: .98rem; letter-spacing: -.01em; }
+.cdd-count { margin-left: auto; font-size: .72rem; font-weight: 700; color: #fff; background: var(--pc); padding: 2px 9px; border-radius: 999px; }
+.catbar-dd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; padding: 8px; max-height: min(64vh, 460px); overflow-y: auto; }
+.catbar-dd-item { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 10px; transition: background .14s, transform .14s; min-width: 0; }
+.catbar-dd-item:hover { background: color-mix(in srgb, var(--pc) 11%, var(--surface-3)); transform: translateX(2px); }
+.cdi-emoji { font-size: 1.05rem; width: 22px; text-align: center; flex-shrink: 0; }
+.cdi-name { font-size: .84rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 560px) { .catbar-dd-grid { grid-template-columns: 1fr; } }
 
 /* ==========================================================================
    HERO — compact + a clear description of what the site is
@@ -163,9 +199,10 @@ footer a { color: var(--accent); font-weight: 600; }
 
 /* ---- responsive --------------------------------------------------------- */
 @media (max-width: 680px) {
-  :root { --nav-h: 116px; }
-  .nav-inner { flex-wrap: wrap; gap: 10px; }
-  .nav-search { order: 3; flex-basis: 100%; max-width: none; margin: 0; }
-  .brand { margin-right: auto; }
+  :root { --nav-h: 128px; }
+  .nav-inner { grid-template-columns: 1fr auto; grid-template-areas: "brand theme" "search search"; gap: 10px; }
+  .brand { grid-area: brand; }
+  #themeToggle { grid-area: theme; }
+  .nav-search { grid-area: search; max-width: none; }
   .tool-grid { grid-template-columns: 1fr; }
 }
