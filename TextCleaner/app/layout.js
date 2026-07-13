@@ -24,6 +24,9 @@ export const metadata = {
   },
   twitter: { card: 'summary_large_image', title: 'UtilityHub — 200+ Free Online Tools' },
   robots: { index: true, follow: true },
+  verification: {
+    google: 'R80MG-snnjYzrctZsjbhDOOed_xcDyt0V89szZzfwco',
+  },
 };
 
 export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#6366f1' };
