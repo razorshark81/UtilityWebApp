@@ -1,5 +1,6 @@
 import './globals.css';
 import './ui.css';
+import { Analytics } from '@vercel/analytics/next';
 import Nav from '@/components/Nav';
 import { UIProvider } from '@/components/UIStore';
 import { SITE } from '@/lib/catalog';
@@ -48,6 +49,7 @@ export default function RootLayout({ children }) {
         </UIProvider>
         <div id="toast" className="toast" role="status" aria-live="polite"></div>
         <canvas id="scratchCanvas" style={{ display: 'none' }}></canvas>
+        <Analytics />
       </body>
     </html>
   );
