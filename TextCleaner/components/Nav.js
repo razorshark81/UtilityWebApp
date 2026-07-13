@@ -24,18 +24,23 @@ export default function Nav() {
     const width = Math.min(600, window.innerWidth - 24);
     let left = r.left;
     if (left + width > window.innerWidth - 12) left = window.innerWidth - 12 - width;
-    setDd({ left: Math.max(12, left), top: r.bottom + 8, width });
+    setDd({ left: Math.max(12, left), top: r.bottom + 4, width });
     setOpenCat(key);
   };
 
-  // close dropdown on escape / resize / outside
+  // close dropdown on escape / resize / outside / scroll
   useEffect(() => {
     if (!openCat) return;
     const close = () => setOpenCat(null);
     const onKey = (e) => { if (e.key === 'Escape') close(); };
     window.addEventListener('resize', close);
+    window.addEventListener('scroll', close, { passive: true });
     document.addEventListener('keydown', onKey);
-    return () => { window.removeEventListener('resize', close); document.removeEventListener('keydown', onKey); };
+    return () => {
+      window.removeEventListener('resize', close);
+      window.removeEventListener('scroll', close);
+      document.removeEventListener('keydown', onKey);
+    };
   }, [openCat]);
 
   // show scroll arrows only when the category row overflows
