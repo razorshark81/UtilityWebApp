@@ -1,11 +1,47 @@
 'use client';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { TOOLS, CATEGORIES, CATEGORY_ORDER, toolsByCat } from '@/lib/catalog';
+import { TOOLS, CATEGORIES, CATEGORY_ORDER, toolsByCat, byId } from '@/lib/catalog';
+import { popularTools } from '@/lib/seo';
 import { useUI } from './UIStore';
+
+function ToolCard({ t }) {
+  const c = CATEGORIES[t.cat];
+  return (
+    <Link className="tool-card" href={`/${t.slug}`} style={{ '--cc': c.color }}>
+      <span className="tc-emoji" style={{ background: `color-mix(in srgb, ${c.color} 14%, var(--surface-2))` }}>{t.emoji}</span>
+      <span className="tc-body">
+        <span className="tc-name">{t.name}</span>
+        <span className="tc-desc">{t.desc}</span>
+      </span>
+    </Link>
+  );
+}
+
+function Row({ icon, title, tools }) {
+  if (!tools.length) return null;
+  return (
+    <section className="cat-section">
+      <div className="cat-head">
+        <div className="cat-badge" style={{ background: 'var(--grad)' }}>{icon}</div>
+        <h2>{title}</h2>
+        <span className="cat-count">{tools.length}</span>
+      </div>
+      <div className="tool-grid">{tools.map((t) => <ToolCard key={t.id} t={t} />)}</div>
+    </section>
+  );
+}
 
 export default function ToolDirectory() {
   const { q, setQ, cat } = useUI();
+  const [recent, setRecent] = useState([]);
+
+  useEffect(() => {
+    try {
+      const ids = JSON.parse(localStorage.getItem('uh-recent') || '[]');
+      setRecent(ids.map((id) => byId[id]).filter(Boolean));
+    } catch (e) {}
+  }, []);
 
   const query = q.trim().toLowerCase();
   const match = (t) =>
@@ -26,6 +62,8 @@ export default function ToolDirectory() {
     [query, cat]
   );
 
+  const showExtras = cat === 'all' && !query;
+
   return (
     <main className="container">
       <section className="hero">
@@ -45,6 +83,9 @@ export default function ToolDirectory() {
         </div>
       </section>
 
+      {showExtras && <Row icon="🕘" title="Recently used" tools={recent} />}
+      {showExtras && <Row icon="⭐" title="Popular tools" tools={popularTools()} />}
+
       {sections.map(({ key, cat: c, tools }) => (
         <section className="cat-section" id={`cat-${key}`} key={key}>
           <div className="cat-head">
@@ -52,17 +93,7 @@ export default function ToolDirectory() {
             <h2>{c.name}</h2>
             <span className="cat-count">{tools.length}</span>
           </div>
-          <div className="tool-grid">
-            {tools.map((t) => (
-              <Link key={t.id} className="tool-card" href={`/${t.slug}`} style={{ '--cc': c.color }}>
-                <span className="tc-emoji" style={{ background: `color-mix(in srgb, ${c.color} 14%, var(--surface-2))` }}>{t.emoji}</span>
-                <span className="tc-body">
-                  <span className="tc-name">{t.name}</span>
-                  <span className="tc-desc">{t.desc}</span>
-                </span>
-              </Link>
-            ))}
-          </div>
+          <div className="tool-grid">{tools.map((t) => <ToolCard key={t.id} t={t} />)}</div>
         </section>
       ))}
 

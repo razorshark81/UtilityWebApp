@@ -22,6 +22,15 @@ const NEEDS = {
 export default function ToolRunner({ id }) {
   const ref = useRef(null);
 
+  // remember this tool as "recently used" (for the homepage)
+  useEffect(() => {
+    try {
+      const key = 'uh-recent';
+      const prev = JSON.parse(localStorage.getItem(key) || '[]').filter((x) => x !== id);
+      localStorage.setItem(key, JSON.stringify([id, ...prev].slice(0, 8)));
+    } catch (e) {}
+  }, [id]);
+
   useEffect(() => {
     let cleanup = () => {};
     let cancelled = false;

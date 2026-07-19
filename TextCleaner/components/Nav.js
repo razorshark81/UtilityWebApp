@@ -15,8 +15,22 @@ export default function Nav() {
   const [dd, setDd] = useState({ left: 0, top: 0, width: 560 });
   const [arrows, setArrows] = useState({ left: false, right: false });
   const scrollRef = useRef(null);
+  const searchRef = useRef(null);
 
   const goHome = () => { if (pathname !== '/') router.push('/'); };
+
+  // press "/" to focus the search (unless already typing)
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key !== '/' || e.metaKey || e.ctrlKey || e.altKey) return;
+      const el = document.activeElement;
+      if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable)) return;
+      e.preventDefault();
+      searchRef.current?.focus();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, []);
 
   const openFor = (key, btn) => {
     if (openCat === key) { setOpenCat(null); return; }
@@ -77,7 +91,7 @@ export default function Nav() {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
           </svg>
-          <input value={q} onChange={(e) => setQ(e.target.value)} onFocus={goHome} placeholder="Search 200+ tools…" aria-label="Search tools" autoComplete="off" />
+          <input ref={searchRef} value={q} onChange={(e) => setQ(e.target.value)} onFocus={goHome} placeholder="Search 200+ tools…   ( press / )" aria-label="Search tools" autoComplete="off" />
         </form>
 
         <ThemeToggle />
