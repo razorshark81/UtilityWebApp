@@ -207,6 +207,10 @@ export const TOOLS = [
   {"id": "bionic-reading", "slug": "bionic-reading", "cat": "text", "emoji": "⚡", "name": "Bionic Reading", "desc": "Bold the start of each word to read faster.", "keywords": ["bionic", "reading", "bionic reading", "online tool", "free", "text"]},
   {"id": "color-mixer", "slug": "color-mixer", "cat": "image", "emoji": "🖍️", "name": "Color Mixer", "desc": "Blend two colors and copy the result.", "keywords": ["color", "mixer", "color mixer", "online tool", "free", "image & design"]},
   {"id": "random-date", "slug": "random-date", "cat": "gen", "emoji": "📅", "name": "Random Date", "desc": "Generate a random date in any range.", "keywords": ["random", "date", "random date", "online tool", "free", "generators"]},
+  {"id": "readability", "slug": "readability", "cat": "text", "emoji": "📖", "name": "Readability Score", "desc": "Flesch reading ease and grade level.", "keywords": ["readability", "score", "readability score", "online tool", "free", "text"]},
+  {"id": "gpa", "slug": "gpa", "cat": "gen", "emoji": "🎓", "name": "GPA Calculator", "desc": "Compute your grade point average.", "keywords": ["gpa", "calculator", "gpa calculator", "online tool", "free", "generators"]},
+  {"id": "screen-info", "slug": "screen-info", "cat": "web", "emoji": "🖥️", "name": "Screen Info", "desc": "See your screen, viewport and browser details.", "keywords": ["screen", "info", "screen info", "online tool", "free", "web & seo"]},
+  {"id": "sitemap-gen", "slug": "sitemap-gen", "cat": "web", "emoji": "🗺️", "name": "Sitemap Generator", "desc": "Build an XML sitemap from a list of URLs.", "keywords": ["sitemap", "generator", "sitemap generator", "online tool", "free", "web & seo"]},
 ];
 export const bySlug = Object.fromEntries(TOOLS.map(t => [t.slug, t]));
 export const byId = Object.fromEntries(TOOLS.map(t => [t.id, t]));

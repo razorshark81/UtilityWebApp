@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next';
 import Nav from '@/components/Nav';
 import { UIProvider } from '@/components/UIStore';
 import IntroAnimation from '@/components/IntroAnimation';
+import BackToTop from '@/components/BackToTop';
 import { SITE, TOOLS } from '@/lib/catalog';
 
 export const metadata = {
@@ -62,10 +63,11 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
         <div className="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
-        <IntroAnimation />
+        <IntroAnimation count={TOOLS.length} />
         <UIProvider>
           <Nav />
           <div className="stage">{children}</div>
+          <BackToTop />
         </UIProvider>
         <div id="toast" className="toast" role="status" aria-live="polite"></div>
         <canvas id="scratchCanvas" style={{ display: 'none' }}></canvas>
