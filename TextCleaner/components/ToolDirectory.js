@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { TOOLS, CATEGORIES, CATEGORY_ORDER, toolsByCat, byId } from '@/lib/catalog';
 import { popularTools } from '@/lib/seo';
 import { useUI } from './UIStore';
+import VisitCounter from './VisitCounter';
 
 function ToolCard({ t }) {
   const c = CATEGORIES[t.cat];
@@ -81,6 +82,7 @@ export default function ToolDirectory() {
           {cat !== 'all' && <> in {CATEGORIES[cat].emoji} {CATEGORIES[cat].name}</>}
           {query && <> matching “{q}”</>}
         </div>
+        <VisitCounter />
       </section>
 
       {showExtras && <Row icon="🕘" title="Recently used" tools={recent} />}

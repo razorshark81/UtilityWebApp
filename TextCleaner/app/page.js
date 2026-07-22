@@ -1,5 +1,6 @@
 import ToolDirectory from '@/components/ToolDirectory';
-import { SITE, TOOLS } from '@/lib/catalog';
+import { SITE, TOOLS, CATEGORIES, CATEGORY_ORDER } from '@/lib/catalog';
+import { popularTools } from '@/lib/seo';
 
 export const metadata = {
   title: { absolute: `${TOOLS.length}+ Free Online Tools — Text, Code, Image & Calculator Utilities | UtilityHub` },
@@ -27,6 +28,25 @@ const orgLd = {
   url: `${SITE.url}/`,
   logo: `${SITE.url}/icon.svg`,
 };
+const collectionLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${TOOLS.length}+ Free Online Tools`,
+  url: `${SITE.url}/`,
+  isPartOf: { '@type': 'WebSite', name: SITE.name, url: `${SITE.url}/` },
+  about: CATEGORY_ORDER.map((k) => CATEGORIES[k].name),
+};
+const popularLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Popular UtilityHub tools',
+  itemListElement: popularTools().map((t, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: t.name,
+    url: `${SITE.url}/${t.slug}/`,
+  })),
+};
 
 export default function Home() {
   return (
@@ -34,6 +54,8 @@ export default function Home() {
       <ToolDirectory />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(popularLd) }} />
     </>
   );
 }

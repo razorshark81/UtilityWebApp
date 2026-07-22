@@ -204,6 +204,9 @@ export const TOOLS = [
   {"id": "pros-cons", "slug": "pros-cons", "cat": "prod", "emoji": "⚖️", "name": "Pros & Cons", "desc": "Weigh a decision side by side.", "keywords": ["pros", "cons", "pros & cons", "online tool", "free", "productivity"]},
   {"id": "text-to-speech", "slug": "text-to-speech", "cat": "prod", "emoji": "🔊", "name": "Text to Speech", "desc": "Read any text aloud in your browser.", "keywords": ["text", "speech", "text to speech", "online tool", "free", "productivity"]},
   {"id": "emoji-translate", "slug": "emoji-translate", "cat": "text", "emoji": "🈹", "name": "Emoji Translator", "desc": "Sprinkle emojis into your text.", "keywords": ["emoji", "translator", "emoji translator", "online tool", "free", "text"]},
+  {"id": "bionic-reading", "slug": "bionic-reading", "cat": "text", "emoji": "⚡", "name": "Bionic Reading", "desc": "Bold the start of each word to read faster.", "keywords": ["bionic", "reading", "bionic reading", "online tool", "free", "text"]},
+  {"id": "color-mixer", "slug": "color-mixer", "cat": "image", "emoji": "🖍️", "name": "Color Mixer", "desc": "Blend two colors and copy the result.", "keywords": ["color", "mixer", "color mixer", "online tool", "free", "image & design"]},
+  {"id": "random-date", "slug": "random-date", "cat": "gen", "emoji": "📅", "name": "Random Date", "desc": "Generate a random date in any range.", "keywords": ["random", "date", "random date", "online tool", "free", "generators"]},
 ];
 export const bySlug = Object.fromEntries(TOOLS.map(t => [t.slug, t]));
 export const byId = Object.fromEntries(TOOLS.map(t => [t.id, t]));

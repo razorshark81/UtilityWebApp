@@ -231,3 +231,86 @@ footer a { color: var(--accent); font-weight: 600; }
   .nav-search { grid-area: search; max-width: none; }
   .tool-grid { grid-template-columns: 1fr; }
 }
+
+/* ==========================================================================
+   LIVE VISITOR COUNTER
+   ========================================================================== */
+.visit-counter {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;
+  padding: 7px 15px 7px 12px; border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 9%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border));
+  color: var(--text-2); font-size: .84rem; font-weight: 600;
+  box-shadow: var(--shadow-xs); animation: vcIn .5s cubic-bezier(.22,.7,.3,1);
+}
+.visit-counter b { color: var(--text); font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.visit-counter .vc-label { color: var(--text-3); font-weight: 600; }
+.vc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 70%, transparent); animation: vcPulse 1.8s ease-out infinite; flex-shrink: 0; }
+.vc-compact { margin-top: 0; padding: 5px 12px 5px 10px; font-size: .8rem; }
+@keyframes vcIn { from { opacity: 0; transform: translateY(6px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes vcPulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 60%, transparent); }
+  70% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--ok) 0%, transparent); }
+  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 0%, transparent); }
+}
+
+/* ==========================================================================
+   INTRO SPLASH (once per session)
+   ========================================================================== */
+.intro-overlay {
+  position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center;
+  background:
+    radial-gradient(900px 600px at 50% 40%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
+    var(--bg);
+  animation: introBgIn .5s ease;
+}
+.intro-overlay.leaving { animation: introOut .6s cubic-bezier(.7,0,.3,1) forwards; }
+.intro-inner { text-align: center; transform: translateY(-4px); }
+.intro-logo {
+  width: 84px; height: 84px; margin: 0 auto 22px; border-radius: 22px; display: grid; place-items: center;
+  background: var(--grad); color: #fff;
+  box-shadow: 0 20px 55px color-mix(in srgb, var(--accent) 55%, transparent);
+  animation: introLogo .9s cubic-bezier(.34,1.56,.64,1) both;
+}
+.intro-logo svg { width: 46px; height: 46px; animation: introDraw 1s ease .2s both; }
+.intro-word {
+  font-size: clamp(2rem, 7vw, 3.2rem); font-weight: 800; letter-spacing: -.04em; color: var(--text);
+  opacity: 0; animation: introUp .6s cubic-bezier(.22,.7,.3,1) .28s forwards;
+}
+.intro-word b { background: var(--grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.intro-tag {
+  margin-top: 10px; color: var(--text-2); font-size: clamp(.9rem, 2.4vw, 1.05rem); font-weight: 500;
+  opacity: 0; animation: introUp .6s cubic-bezier(.22,.7,.3,1) .46s forwards;
+}
+@keyframes introBgIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes introOut { to { opacity: 0; visibility: hidden; transform: scale(1.04); } }
+@keyframes introLogo { 0% { opacity: 0; transform: scale(.4) rotate(-25deg); } 100% { opacity: 1; transform: none; } }
+@keyframes introDraw { from { stroke-dasharray: 90; stroke-dashoffset: 90; } to { stroke-dashoffset: 0; } }
+@keyframes introUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* ==========================================================================
+   RANDOMIZED PAGE TRANSITIONS (see app/template.js)
+   ========================================================================== */
+.page-transition { will-change: transform, opacity, filter; }
+.pt-fade   { animation: ptFade   .42s ease both; }
+.pt-up     { animation: ptUp     .46s cubic-bezier(.22,.7,.3,1) both; }
+.pt-down   { animation: ptDown   .46s cubic-bezier(.22,.7,.3,1) both; }
+.pt-left   { animation: ptLeft   .46s cubic-bezier(.22,.7,.3,1) both; }
+.pt-right  { animation: ptRight  .46s cubic-bezier(.22,.7,.3,1) both; }
+.pt-scale  { animation: ptScale  .44s cubic-bezier(.34,1.3,.64,1) both; }
+.pt-blur   { animation: ptBlur   .5s  ease both; }
+.pt-rotate { animation: ptRotate .5s  cubic-bezier(.34,1.3,.64,1) both; }
+@keyframes ptFade   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ptUp     { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+@keyframes ptDown   { from { opacity: 0; transform: translateY(-26px); } to { opacity: 1; transform: none; } }
+@keyframes ptLeft   { from { opacity: 0; transform: translateX(34px); } to { opacity: 1; transform: none; } }
+@keyframes ptRight  { from { opacity: 0; transform: translateX(-34px); } to { opacity: 1; transform: none; } }
+@keyframes ptScale  { from { opacity: 0; transform: scale(.965); } to { opacity: 1; transform: none; } }
+@keyframes ptBlur   { from { opacity: 0; filter: blur(9px); } to { opacity: 1; filter: blur(0); } }
+@keyframes ptRotate { from { opacity: 0; transform: rotate(-2.2deg) scale(.97); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition, .pt-fade, .pt-up, .pt-down, .pt-left, .pt-right, .pt-scale, .pt-blur, .pt-rotate,
+  .intro-logo, .intro-logo svg, .intro-word, .intro-tag, .vc-dot { animation: none !important; }
+  .intro-word, .intro-tag { opacity: 1 !important; }
+}

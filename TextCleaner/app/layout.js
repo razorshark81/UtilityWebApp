@@ -3,27 +3,43 @@ import './ui.css';
 import { Analytics } from '@vercel/analytics/next';
 import Nav from '@/components/Nav';
 import { UIProvider } from '@/components/UIStore';
-import { SITE } from '@/lib/catalog';
+import IntroAnimation from '@/components/IntroAnimation';
+import { SITE, TOOLS } from '@/lib/catalog';
 
 export const metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: 'UtilityHub — 200+ Free Online Tools for Everyday Tasks',
+    default: `UtilityHub — ${TOOLS.length}+ Free Online Tools for Everyday Tasks`,
     template: '%s · UtilityHub',
   },
   description:
-    '200+ free, fast, privacy-first browser tools for text, code, images, conversions, calculators, generators and more. No signup, no uploads — everything runs locally.',
+    `${TOOLS.length}+ free, fast, privacy-first browser tools for text, code, images, conversions, calculators, generators and more. No signup, no uploads — everything runs locally.`,
   applicationName: 'UtilityHub',
-  keywords: ['online tools', 'free tools', 'web tools', 'utilities', 'converters', 'calculators', 'generators'],
+  category: 'technology',
+  keywords: ['online tools', 'free tools', 'web tools', 'utilities', 'converters', 'calculators', 'generators', 'text tools', 'developer tools'],
+  authors: [{ name: 'UtilityHub' }],
+  creator: 'UtilityHub',
+  publisher: 'UtilityHub',
+  formatDetection: { telephone: false, email: false, address: false },
+  alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
     siteName: 'UtilityHub',
-    title: 'UtilityHub — 200+ Free Online Tools',
+    locale: 'en_US',
+    title: `UtilityHub — ${TOOLS.length}+ Free Online Tools`,
     description: 'A growing collection of fast, free, privacy-first browser utilities.',
     url: SITE.url,
   },
-  twitter: { card: 'summary_large_image', title: 'UtilityHub — 200+ Free Online Tools' },
-  robots: { index: true, follow: true },
+  twitter: {
+    card: 'summary_large_image',
+    title: `UtilityHub — ${TOOLS.length}+ Free Online Tools`,
+    description: 'A growing collection of fast, free, privacy-first browser utilities.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 },
+  },
   verification: {
     google: 'R80MG-snnjYzrctZsjbhDOOed_xcDyt0V89szZzfwco',
   },
@@ -46,6 +62,7 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
         <div className="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+        <IntroAnimation />
         <UIProvider>
           <Nav />
           <div className="stage">{children}</div>
