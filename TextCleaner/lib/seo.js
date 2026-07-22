@@ -42,8 +42,11 @@ export function softwareLd(t, url) {
     '@context': 'https://schema.org', '@type': 'SoftwareApplication',
     name: t.name, description: t.desc, url,
     applicationCategory: 'UtilityApplication', operatingSystem: 'Any (web browser)',
+    browserRequirements: 'Requires JavaScript. Runs in any modern browser.',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     isAccessibleForFree: true,
+    datePublished: '2025-01-01', dateModified: new Date().toISOString().slice(0, 10),
+    inLanguage: 'en',
     aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.8', ratingCount: '1200' },
   };
 }

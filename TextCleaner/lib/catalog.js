@@ -211,6 +211,10 @@ export const TOOLS = [
   {"id": "gpa", "slug": "gpa", "cat": "gen", "emoji": "🎓", "name": "GPA Calculator", "desc": "Compute your grade point average.", "keywords": ["gpa", "calculator", "gpa calculator", "online tool", "free", "generators"]},
   {"id": "screen-info", "slug": "screen-info", "cat": "web", "emoji": "🖥️", "name": "Screen Info", "desc": "See your screen, viewport and browser details.", "keywords": ["screen", "info", "screen info", "online tool", "free", "web & seo"]},
   {"id": "sitemap-gen", "slug": "sitemap-gen", "cat": "web", "emoji": "🗺️", "name": "Sitemap Generator", "desc": "Build an XML sitemap from a list of URLs.", "keywords": ["sitemap", "generator", "sitemap generator", "online tool", "free", "web & seo"]},
+  {"id": "char-limit", "slug": "char-limit", "cat": "web", "emoji": "📏", "name": "Character Limit Checker", "desc": "Check text against social and SEO length limits.", "keywords": ["character", "limit", "checker", "character limit checker", "online tool", "free", "web & seo"]},
+  {"id": "remove-emoji", "slug": "remove-emoji", "cat": "text", "emoji": "🚫", "name": "Remove Emoji", "desc": "Strip emojis and symbols out of text.", "keywords": ["remove", "emoji", "remove emoji", "online tool", "free", "text"]},
+  {"id": "year-progress", "slug": "year-progress", "cat": "time", "emoji": "📆", "name": "Year Progress Bar", "desc": "See how much of today, the month and year is gone.", "keywords": ["year", "progress", "bar", "year progress bar", "online tool", "free", "time & date"]},
+  {"id": "letter-frequency", "slug": "letter-frequency", "cat": "text", "emoji": "🔡", "name": "Letter Frequency", "desc": "Count how often each letter appears.", "keywords": ["letter", "frequency", "letter frequency", "online tool", "free", "text"]},
 ];
 export const bySlug = Object.fromEntries(TOOLS.map(t => [t.slug, t]));
 export const byId = Object.fromEntries(TOOLS.map(t => [t.id, t]));

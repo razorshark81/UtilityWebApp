@@ -5,6 +5,7 @@ import Nav from '@/components/Nav';
 import { UIProvider } from '@/components/UIStore';
 import IntroAnimation from '@/components/IntroAnimation';
 import BackToTop from '@/components/BackToTop';
+import CommandPalette from '@/components/CommandPalette';
 import { SITE, TOOLS } from '@/lib/catalog';
 
 export const metadata = {
@@ -68,6 +69,7 @@ export default function RootLayout({ children }) {
           <Nav />
           <div className="stage">{children}</div>
           <BackToTop />
+          <CommandPalette />
         </UIProvider>
         <div id="toast" className="toast" role="status" aria-live="polite"></div>
         <canvas id="scratchCanvas" style={{ display: 'none' }}></canvas>

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { bySlug, TOOLS, CATEGORIES, toolsByCat, seoTitle, seoDescription, SITE } from '@/lib/catalog';
 import { toolFaqs, toolSteps, TOOL_FEATURES, softwareLd, faqLd, howToLd, breadcrumbLd } from '@/lib/seo';
 import ToolRunner from '@/components/ToolRunner';
+import ShareButton from '@/components/ShareButton';
 
 export function generateStaticParams() {
   return TOOLS.map((t) => ({ slug: t.slug }));
@@ -51,7 +52,8 @@ export default function ToolPage({ params }) {
 
       <header className="tool-hero">
         <div className="th-emoji" style={{ background: cat.color }}>{t.emoji}</div>
-        <div><h1>{t.name}</h1><p>{t.desc}</p></div>
+        <div className="th-text"><h1>{t.name}</h1><p>{t.desc}</p></div>
+        <ShareButton title={`${t.name} — UtilityHub`} text={t.desc} />
       </header>
 
       <ToolRunner id={t.id} />
@@ -112,7 +114,7 @@ export default function ToolPage({ params }) {
         </section>
       )}
 
-      <footer>Made with <b>♥</b> · <Link href="/">All {TOOLS.length} UtilityHub tools</Link> · Everything runs locally in your browser.</footer>
+      <footer>Made with <b>♥</b> · <Link href="/tools">All {TOOLS.length} UtilityHub tools</Link> · <Link href="/">Home</Link> · Everything runs locally in your browser.</footer>
 
       {ld.map((obj, i) => (
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(obj) }} />

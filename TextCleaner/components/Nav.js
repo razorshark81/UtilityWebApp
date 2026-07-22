@@ -94,7 +94,13 @@ export default function Nav() {
           <input ref={searchRef} value={q} onChange={(e) => setQ(e.target.value)} onFocus={goHome} placeholder="Search 200+ tools…   ( press / )" aria-label="Search tools" autoComplete="off" />
         </form>
 
-        <ThemeToggle />
+        <div className="nav-actions">
+          <button className="cmdk-trigger" onClick={() => window.dispatchEvent(new Event('uh-open-cmdk'))} aria-label="Quick search (Ctrl or Cmd + K)" title="Quick search — Ctrl/⌘ K">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
+            <kbd>⌘K</kbd>
+          </button>
+          <ThemeToggle />
+        </div>
       </div>
 
       <div className="catbar">
@@ -102,6 +108,10 @@ export default function Nav() {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
         </button>
         <div className="catbar-scroll" ref={scrollRef}>
+          <Link href="/tools" className="catbar-item catbar-all">
+            <span className="ci-emoji">🧰</span>
+            <span className="ci-name">All tools</span>
+          </Link>
           {CATEGORY_ORDER.map((key) => {
             const c = CATEGORIES[key];
             return (

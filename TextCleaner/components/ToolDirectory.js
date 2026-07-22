@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { TOOLS, CATEGORIES, CATEGORY_ORDER, toolsByCat, byId } from '@/lib/catalog';
 import { popularTools } from '@/lib/seo';
 import { useUI } from './UIStore';
-import VisitCounter from './VisitCounter';
 
 function Star({ active }) {
   return (
@@ -146,7 +145,6 @@ export default function ToolDirectory() {
           {cat !== 'all' && <> in {CATEGORIES[cat].emoji} {CATEGORIES[cat].name}</>}
           {query && <> matching “{q}”</>}
         </div>
-        <VisitCounter />
       </section>
 
       {showExtras && <Row icon="⭐" title="Your favorites" tools={favTools} favs={favs} onFav={onFav} />}
@@ -166,7 +164,7 @@ export default function ToolDirectory() {
 
       {sections.length === 0 && <div className="no-results">No tools match <b>“{q}”</b>. Try another keyword.</div>}
 
-      <footer>Made with <b>♥</b> · UtilityHub © 2026 · {TOOLS.length} tools that run locally in your browser.</footer>
+      <footer>Made with <b>♥</b> · <Link href="/tools">All {TOOLS.length} tools</Link> · UtilityHub © 2026 · Everything runs locally in your browser.</footer>
     </main>
   );
 }
